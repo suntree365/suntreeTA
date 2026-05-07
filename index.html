@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동탄 해나무한의원 | 교통사고 집중 치료</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --main-color: #386641; /* 해나무에 어울리는 딥 그린 */
+            --light-bg: #f5f7f5;
+            --white: #ffffff;
+            --text-dark: #333;
+            --point-color: #e67e22; /* 강조용 오렌지 */
+            --highlight-color: #ffda79; /* 타이틀 강조용 옐로우 */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: var(--light-bg); color: var(--text-dark); }
+
+        /* 1. 대문 (헤더) */
+        .main-header {
+            background: linear-gradient(135deg, #386641 0%, #6a994e 100%);
+            width: 100%;
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        /* 대문 텍스트 세부 조정 */
+        .clinic-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px; /* 한의원 이름과 타이틀 사이 간격 확보 */
+        }
+        
+        .main-title {
+            font-size: 3rem; /* 글씨 크기 키우기 */
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 35px; /* 타이틀과 예약 안내 멘트 사이 간격 확보 */
+            word-break: keep-all;
+        }
+
+        .main-title .highlight {
+            color: var(--highlight-color); /* 교통사고 후유증 강조 색상 */
+        }
+
+        .reservation-notice {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 35px; /* 버튼과의 간격 */
+        }
+
+        /* 대문 내 네이버 예약 버튼 */
+        .btn-group { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .btn-naver {
+            background-color: white; color: var(--text-dark); padding: 15px 40px;
+            border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px;
+            text-decoration: none; width: fit-content; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: 0.2s; font-size: 1.1rem;
+        }
+        .btn-naver:hover { transform: translateY(-2px); }
+        .btn-naver i { color: #03c75a; font-size: 1.3rem; }
+
+        /* 2. 세부페이지 제목 (탭 내비게이션) */
+        .tab-nav {
+            display: flex; justify-content: center; background: white;
+            border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 10;
+        }
+        .tab-item {
+            flex: 1; max-width: 200px;
+            padding: 18px 10px; cursor: pointer; font-weight: 500; color: #666;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            transition: 0.3s; border-bottom: 3px solid transparent; text-align: center;
+        }
+        .tab-item i { font-size: 1.3rem; }
+        .tab-item.active { color: var(--main-color); border-bottom: 3px solid var(--main-color); font-weight: 700; }
+
+        /* 3. 화면 전환 방식 (콘텐츠 섹션) */
+        .content-container { max-width: 800px; margin: 30px auto; padding: 0 20px; min-height: 420px; }
+        .tab-content { display: none; background: var(--white); padding: 35px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.04); }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 내부 디자인 요소 */
+        .info-card { background: #f4f8f4; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid var(--main-color); line-height: 1.6; }
+        .info-card h3 { margin-bottom: 12px; color: var(--main-color); display: flex; align-items: center; gap: 8px; font-size: 1.2rem; }
+        .treatment-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .treatment-box div { background: #f0f0f0; padding: 18px; border-radius: 12px; text-align: center; font-weight: 500; }
+
+        /* 테이블 */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px #eee; }
+        th, td { border: 1px solid #eee; padding: 14px; text-align: center; }
+        th { background: #f8f9fa; color: #555; font-weight: 700; }
+
+        /* 진료시간 전용 레이아웃 */
+        .time-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #ddd; }
+        .time-row:last-child { border-bottom: none; }
+        .time-label { font-weight: 700; color: #444; }
+
+        /* 4. 하단 내비게이션 버튼 */
+        .page-footer { max-width: 800px; margin: 20px auto 60px; display: flex; justify-content: space-between; padding: 0 20px; }
+        .btn-page {
+            background: white; border: 1px solid #ddd; padding: 15px 40px; border-radius: 10px;
+            cursor: pointer; font-weight: bold; color: #555; transition: 0.2s;
+        }
+        .btn-page:hover { background: #f0f0f0; }
+        .btn-page.next { background: var(--main-color); color: white; border: none; }
+
+        /* 모바일 최적화 */
+        @media (max-width: 600px) {
+            .tab-item { padding: 15px 5px; font-size: 0.85rem; }
+            .treatment-box { grid-template-columns: 1fr; }
+            .clinic-name { font-size: 1.3rem; margin-bottom: 15px; }
+            .main-title { font-size: 2.2rem; margin-bottom: 25px; }
+            .tab-content { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="clinic-name">동탄 해나무한의원</div>
+        <h1 class="main-title"><span class="highlight">교통사고 후유증</span><br>회복 프로그램</h1>
+        <p class="reservation-notice">해나무한의원은 예약 환자 우선으로 진료합니다</p>
+        <div class="btn-group">
+            <a href="https://booking.naver.com/booking/13/bizes/280075/items/3228016?area=ple&lang=ko&theme=place" class="btn-naver" target="_blank">
+                <i class="fa-solid fa-check-to-slot"></i> 네이버 진료 예약하기
+            </a>
+        </div>
+    </header>
+
+    <nav class="tab-nav">
+        <div class="tab-item active" onclick="openTab(0)">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>치료의 중요성</span>
+        </div>
+        <div class="tab-item" onclick="openTab(1)">
+            <i class="fa-solid fa-briefcase-medical"></i>
+            <span>치료 방법</span>
+        </div>
+        <div class="tab-item" onclick="openTab(2)">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span>진단 및 연장</span>
+        </div>
+        <div class="tab-item" onclick="openTab(3)">
+            <i class="fa-solid fa-clock"></i>
+            <span>진료시간/위치</span>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <section id="tab0" class="tab-content active">
+            <h2 style="margin-bottom:20px; color: var(--text-dark);">증상 회복을 위한 원장님의 당부</h2>
+            <div class="info-card">
+                <h3><i class="fa-solid fa-wave-square"></i> 통증은 파도처럼 반복됩니다</h3>
+                <p>사고 이후 발생하는 근육 통증은 <strong>초기 3주 동안 좋아졌다 나빠졌다를 반복</strong>하는 특징이 있습니다. 당장 통증이 줄었다고 해서 치료를 멈추시면 안 됩니다.</p>
+            </div>
+            <div class="info-card">
+                <h3><i class="fa-solid fa-calendar-check"></i> 골든타임을 놓치지 마세요</h3>
+                <p>교통사고 후유증이 적으려면 <strong>초기 3주와 중기 3개월 동안의 집중 치료가 매우 중요</strong>합니다. 바쁘시더라도 꼭 시간을 내시어 꾸준히 내원해 주시기 바랍니다.</p>
+            </div>
+        </section>
+
+        <section id="tab1" class="tab-content">
+            <h2 style="margin-bottom:20px;">후유증 없이 사고를 종결하는 법</h2>
+            <p style="margin-bottom: 20px; color: #555;">빠른 증상 회복이 되실 수 있도록 <strong>추나요법과 한방물리요법을 병행</strong>하여 꼼꼼하게 치료해 드립니다.</p>
+            
+            <div class="info-card">
+                <h3>추나 요법 (원장 직접 시행)</h3>
+                <p>사고 충격으로 틀어진 척추와 관절의 정렬을 수기로 바로잡아 통증의 근본 원인을 해결하고 운동 가동 범위를 회복시킵니다.</p>
+            </div>
+            <div class="info-card">
+                <h3>한방 물리 요법 및 복합 치료</h3>
+                <p>손상된 인대와 근육의 염증을 가라앉히는 약침, 뭉친 어혈을 배출하는 부항 및 맞춤 한약을 병행하여 빠른 일상 복귀를 돕습니다.</p>
+            </div>
+        </section>
+
+        <section id="tab2" class="tab-content">
+            <h2 style="margin-bottom:20px;">진료비 및 4주 이후 치료 안내</h2>
+            <div class="info-card" style="border-left-color: var(--point-color);">
+                <h3 style="color:var(--point-color);"><i class="fa-solid fa-won-sign"></i> 자동차보험 전액 적용</h3>
+                <p>침, 뜸, 부항, 추나, 한약 등 <strong>모든 한방 치료는 본인부담금 없이(0원)</strong> 자동차보험으로 처리됩니다. (내원 시 대인접수번호만 알려주세요)</p>
+            </div>
+            <div class="info-card">
+                <h3><i class="fa-solid fa-file-medical"></i> 사고 4주 경과 시 진단서 발급</h3>
+                <p>2023년 규정 변경으로 사고 4주 이후 계속 치료가 필요하신 경우 <strong>'연장 진단서'</strong>가 필요합니다. 해나무한의원에서는 환자분이 완쾌될 때까지 안심하고 치료받으실 수 있도록 진단서 발급 및 제출을 도와드립니다.</p>
+            </div>
+        </section>
+
+        <section id="tab3" class="tab-content">
+            <h2 style="margin-bottom:20px;">진료 안내 및 오시는 길</h2>
+            
+            <div class="info-card">
+                <h3 style="margin-bottom: 15px;"><i class="fa-regular fa-clock"></i> 진료 시간</h3>
+                <div class="time-row">
+                    <span class="time-label">월 ~ 금 (평일)</span>
+                    <span>09:30 ~ 20:00</span>
+                </div>
+                <div class="time-row">
+                    <span class="time-label">토요일</span>
+                    <span>09:30 ~ 15:00</span>
+                </div>
+                <div class="time-row">
+                    <span class="time-label">일요일 / 공휴일</span>
+                    <span>09:30 ~ 15:00</span>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                    * 평일 점심시간: 13:00 ~ 14:00<br>
+                    * 토요일 점심시간: 13:00 ~ 14:00<br>
+                    * 일/공휴일은 점심시간 없이 진료합니다.
+                </p>
+            </div>
+
+            <div class="info-card" style="border-left-color: #555;">
+                <h3 style="color: #444; margin-bottom: 10px;"><i class="fa-solid fa-location-dot"></i> 오시는 길 및 주차</h3>
+                <p><strong>주소:</strong> 경기도 화성시 동탄구 동탄솔빛로 47, 2층</p>
+                <p><strong>전화:</strong> 031-8003-3653</p>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc;">
+                    <p><strong>🅿️ 주차 안내</strong></p>
+                    <p style="font-size: 0.95rem; margin-top: 5px;">1. 본 건물 지하 주차장 이용<br>2. 건물 뒷편 노상 공영 주차장 이용 가능</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="page-footer">
+        <button class="btn-page" onclick="prevTab()">← 이전 안내</button>
+        <button class="btn-page next" onclick="nextTab()">다음 안내 →</button>
+    </div>
+
+    <script>
+        let currentTab = 0;
+        const tabs = document.querySelectorAll('.tab-item');
+        const contents = document.querySelectorAll('.tab-content');
+
+        function openTab(index) {
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            tabs[index].classList.add('active');
+            contents[index].classList.add('active');
+            currentTab = index;
+
+            window.scrollTo({ top: 220, behavior: 'smooth' });
+        }
+
+        function nextTab() {
+            if (currentTab < tabs.length - 1) {
+                openTab(currentTab + 1);
+            } else {
+                openTab(0); 
+            }
+        }
+
+        function prevTab() {
+            if (currentTab > 0) {
+                openTab(currentTab - 1);
+            }
+        }
+    </script>
+</body>
+</html>
